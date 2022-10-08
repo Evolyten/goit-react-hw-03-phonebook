@@ -1,0 +1,11 @@
+.filter{
+    display: block;
+    margin: 0 auto;
+}
+
+.filter:focus{
+    
+     border: 2px solid blue;
+    outline: none;
+        
+}
