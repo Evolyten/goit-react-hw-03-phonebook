@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-
+import toast, { Toaster } from 'react-hot-toast';
 import { ContactForm } from './ContactBook/ContactForm/ContactForm';
 import ContactList from './ContactBook/ContactList/ContactList';
 import Filter from './ContactBook/Filter/Filter';
@@ -8,7 +8,6 @@ import css from './ContactBook/ContactBook.module.css';
 import { Section } from './ContactBook/Section/Section';
 
 const USER_KEY = 'reader_item_contacts';
-
 class App extends Component {
   state = {
     contacts: [],
@@ -16,8 +15,13 @@ class App extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    const contactsToLS = JSON.stringify(this.state.contacts);
-    localStorage.setItem(USER_KEY, contactsToLS);
+    const prevContacts = prevState.contacts;
+    const nextContacts = this.state.contacts;
+
+    if (prevContacts !== nextContacts) {
+      const contactsToLS = JSON.stringify(this.state.contacts);
+      localStorage.setItem(USER_KEY, contactsToLS);
+    }
   };
 
   componentDidMount() {
@@ -32,7 +36,8 @@ class App extends Component {
     let { contacts } = this.state;
 
     if (contacts.some(formData => formData.name === userData.name)) {
-      alert(`${userData.name} is already in contacts`);
+      // alert(`${userData.name} is already in contacts`);
+      toast.error(`${userData.name} is already in contacts`);
     } else {
       userData.id = nanoid(5);
       this.setState(prevState => ({
@@ -81,6 +86,7 @@ class App extends Component {
             <></>
           )}
         </Section>
+        <Toaster position="top-right" reverseOrder={true} />
       </div>
     );
   }
